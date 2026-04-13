@@ -17,11 +17,11 @@ body {
 }
 
 /* COLORES HARAKAT */
-.fatha { color: blue; }
-.kasra { color: green; }
-.damma { color: red; }
-.sukun { color: gray; }
-.shadda { color: purple; }
+.fatha { color: blue !important; }
+.kasra { color: green !important; }
+.damma { color: red !important; }
+.sukun { color: gray !important; }
+.shadda { color: purple !important; }
 
 button {
   padding: 10px;
