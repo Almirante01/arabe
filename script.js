@@ -1,13 +1,8 @@
-document.body.innerHTML = highlight("مُدَرِّسٌ");
+let palabra = "مُدَرِّسٌ";
 
-function highlight(text){
-  return text
-    .replace(/َ/g, '<span style="color:blue">َ</span>')
-    .replace(/ِ/g, '<span style="color:green">ِ</span>')
-    .replace(/ُ/g, '<span style="color:red">ُ</span>')
-    .replace(/ْ/g, '<span style="color:gray">ْ</span>')
-    .replace(/ّ/g, '<span style="color:purple">ّ</span>');
+// Mostrar código Unicode de cada carácter
+for (let c of palabra) {
+  console.log(c, c.charCodeAt(0).toString(16));
 }
 
-  return result;
-}
+document.body.innerHTML = palabra;
