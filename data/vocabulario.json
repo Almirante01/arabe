@@ -1,0 +1,20 @@
+[
+ {
+  "ar": "مُدَرِّسٌ",
+  "es": "profesor",
+  "img": "images/profesor.jpg",
+  "audio": "audio/profesor.mp3"
+ },
+ {
+  "ar": "بَيْتٌ",
+  "es": "casa",
+  "img": "images/casa.jpg",
+  "audio": "audio/casa.mp3"
+ },
+ {
+  "ar": "قِطٌّ",
+  "es": "gato",
+  "img": "images/gato.jpg",
+  "audio": "audio/gato.mp3"
+ }
+]
