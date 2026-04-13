@@ -1,41 +1,24 @@
 body {
   font-family: Arial;
-  background: url("https://i.imgur.com/8Km9tLL.jpg");
-  background-size: cover;
   text-align: center;
 }
 
-.overlay {
-  background: rgba(255,255,255,0.9);
-  padding: 20px;
-}
-
 .arabe {
-  font-size: 55px;
-  font-weight: bold;
+  font-size: 60px;
   direction: rtl;
+  font-weight: bold;
 }
 
-/* COLORES HARAKAT */
+/* HARAKAT COLORES (FORZADOS) */
 .fatha { color: blue !important; }
 .kasra { color: green !important; }
 .damma { color: red !important; }
 .sukun { color: gray !important; }
 .shadda { color: purple !important; }
 
-button {
-  padding: 10px;
-  margin: 5px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-}
-
 .card {
-  background: white;
-  padding: 15px;
-  margin: 10px;
+  background: #f4f4f4;
+  margin: 20px;
+  padding: 20px;
   border-radius: 10px;
 }
-
-
