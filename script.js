@@ -23,7 +23,12 @@ async function loadData() {
 }
 
 function highlight(text){
-  return text.replace(/[\u064B-\u0652]/g, m => `<span class="harakat">${m}</span>`);
+  return text
+    .replace(/\u064E/g, '<span class="fatha">َ</span>')   // fatha
+    .replace(/\u0650/g, '<span class="kasra">ِ</span>')   // kasra
+    .replace(/\u064F/g, '<span class="damma">ُ</span>')   // damma
+    .replace(/\u0652/g, '<span class="sukun">ْ</span>')   // sukun
+    .replace(/\u0651/g, '<span class="shadda">ّ</span>'); // shadda
 }
 
 function display(){
