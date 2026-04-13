@@ -1,4 +1,13 @@
-[
- {"ar":"قِطٌّ","es":"gato"},
- {"ar":"كَلْبٌ","es":"perro"}
-]
+{
+  "categoria": "Animales",
+  "items": [
+    {
+      "arabe": "قِطَّةٌ",
+      "singular": "Qittah",
+      "plural": "قِطَطٌ",
+      "traduccion": "Gato",
+      "genero": "F",
+      "ejemplo": "القِطَّةُ جَمِيلَةٌ"
+    }
+  ]
+}
