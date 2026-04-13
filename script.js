@@ -1,44 +1,27 @@
-let words = [];
-let current = "all";
-let user = [];
+let words = [
+  {ar:"كَتَبَ", es:"escribir"},
+  {ar:"مُدَرِّسٌ", es:"profesor"},
+  {ar:"بَيْتٌ", es:"casa"},
+  {ar:"قَلَمٌ", es:"bolígrafo"}
+];
 
-async function loadData() {
-
-  const files = [
-    {file:"verbos.json", type:"verbo"},
-    {file:"sustantivos.json", type:"sustantivo"},
-    {file:"adjetivos.json", type:"adjetivo"},
-    {file:"animales.json", type:"animal"},
-    {file:"paises.json", type:"pais"},
-    {file:"lugares.json", type:"lugar"},
-    {file:"conectores.json", type:"nexo"}
-  ];
-
-  for (let f of files) {
-    let data = await fetch("data/" + f.file).then(r => r.json());
-    words.push(...data.map(w => ({...w, type:f.type})));
-  }
-
-  display();
-}
-
+// FUNCIÓN DEFINITIVA
 function highlight(text){
   let result = "";
 
   for (let char of text) {
-    switch(char) {
-      case "\u064E": result += '<span class="fatha">َ</span>'; break;
-      case "\u0650": result += '<span class="kasra">ِ</span>'; break;
-      case "\u064F": result += '<span class="damma">ُ</span>'; break;
-      case "\u0652": result += '<span class="sukun">ْ</span>'; break;
-      case "\u0651": result += '<span class="shadda">ّ</span>'; break;
-      default: result += char;
-    }
+    if (char === "\u064E") result += '<span class="fatha">َ</span>';
+    else if (char === "\u0650") result += '<span class="kasra">ِ</span>';
+    else if (char === "\u064F") result += '<span class="damma">ُ</span>';
+    else if (char === "\u0652") result += '<span class="sukun">ْ</span>';
+    else if (char === "\u0651") result += '<span class="shadda">ّ</span>';
+    else result += char;
   }
 
   return result;
 }
 
+// MOSTRAR
 function display(){
   let list = document.getElementById("list");
   list.innerHTML = "";
@@ -53,61 +36,4 @@ function display(){
   });
 }
 
-function filter(type){
-  current = type;
-  display();
-}
-
-function speakText(text){
-  let msg = new SpeechSynthesisUtterance(text);
-  msg.lang="ar-SA";
-  speechSynthesis.speak(msg);
-}
-
-function speak(){
-  speakText(document.getElementById("wordInput").value);
-}
-
-// JUEGO + CORRECCIÓN
-let correct = ["أنا","طالب","في","المدرسة"];
-
-function loadGame(){
-  let g = document.getElementById("game");
-  g.innerHTML="";
-  [...correct].sort(()=>Math.random()-0.5).forEach(w=>{
-    let b=document.createElement("button");
-    b.innerText=w;
-    b.onclick=()=>select(w);
-    g.appendChild(b);
-  });
-}
-
-function select(w){
-  user.push(w);
-  document.getElementById("user").innerText=user.join(" ");
-}
-
-function check(){
-  let frase=user.join(" ");
-  let res=document.getElementById("result");
-
-  if(frase===correct.join(" ")){
-    res.innerHTML="✅ Correcto";
-    return;
-  }
-
-  if(!frase.startsWith("أنا")){
-    res.innerHTML="❌ El sujeto debe ir primero";
-    return;
-  }
-
-  if(!frase.includes("في")){
-    res.innerHTML="❌ Falta preposición (في)";
-    return;
-  }
-
-  res.innerHTML="❌ Revisa el orden de la frase";
-}
-
-loadData();
-loadGame();
+display();
