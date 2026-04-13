@@ -1,11 +1,45 @@
-function highlight(text){
-  return text
-    .replace(/َ/g, '<span style="color:blue">َ</span>')
-    .replace(/ِ/g, '<span style="color:green">ِ</span>')
-    .replace(/ُ/g, '<span style="color:red">ُ</span>')
-    .replace(/ْ/g, '<span style="color:gray">ْ</span>')
-    .replace(/ّ/g, '<span style="color:purple">ّ</span>');
+function pintarHarakat(texto) {
+
+  let resultado = "";
+
+  for (let i = 0; i < texto.length; i++) {
+
+    let letra = texto[i];
+    let siguiente = texto[i+1];
+
+    resultado += letra;
+
+    if (siguiente === "َ") {
+      resultado += '<span style="color:blue">َ</span>';
+      i++;
+    }
+    else if (siguiente === "ِ") {
+      resultado += '<span style="color:green">ِ</span>';
+      i++;
+    }
+    else if (siguiente === "ُ") {
+      resultado += '<span style="color:red">ُ</span>';
+      i++;
+    }
+    else if (siguiente === "ْ") {
+      resultado += '<span style="color:gray">ْ</span>';
+      i++;
+    }
+    else if (siguiente === "ّ") {
+      resultado += '<span style="color:purple">ّ</span>';
+      i++;
+    }
+
+  }
+
+  return resultado;
 }
 
-// 👇 COPIA LA PALABRA AQUÍ (YA ESTÁ PUESTA)
-document.body.innerHTML = highlight("مُدَرِّسٌ");
+// TEXTO CONTROLADO (IMPORTANTE)
+let palabra = "مُدَرِّسٌ";
+
+document.body.innerHTML = `
+<div style="font-size:60px; direction:rtl;">
+${pintarHarakat(palabra)}
+</div>
+`;
