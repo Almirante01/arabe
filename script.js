@@ -43,14 +43,11 @@ function display(){
   let list = document.getElementById("list");
   list.innerHTML = "";
 
-  words
-  .filter(w => current==="all" || w.type===current)
-  .forEach(w=>{
+  words.forEach(w=>{
     list.innerHTML += `
       <div class="card">
         <div class="arabe">${highlight(w.ar)}</div>
         <div>${w.es}</div>
-        <button onclick="speakText('${w.ar}')">🔊</button>
       </div>
     `;
   });
