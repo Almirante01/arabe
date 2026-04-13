@@ -5,16 +5,13 @@ ${highlight("مُدَرِّسٌ")}
 `;
 
 function highlight(text){
-  let result = "";
-
-  for (let char of text) {
-    if (char === "\u064E") result += '<span style="color:blue">َ</span>';
-    else if (char === "\u0650") result += '<span style="color:green">ِ</span>';
-    else if (char === "\u064F") result += '<span style="color:red">ُ</span>';
-    else if (char === "\u0652") result += '<span style="color:gray">ْ</span>';
-    else if (char === "\u0651") result += '<span style="color:purple">ّ</span>';
-    else result += char;
-  }
+  return text
+    .replace(/َ/g, '<span style="color:blue">َ</span>')
+    .replace(/ِ/g, '<span style="color:green">ِ</span>')
+    .replace(/ُ/g, '<span style="color:red">ُ</span>')
+    .replace(/ْ/g, '<span style="color:gray">ْ</span>')
+    .replace(/ّ/g, '<span style="color:purple">ّ</span>');
+}
 
   return result;
 }
