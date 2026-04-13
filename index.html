@@ -2,15 +2,52 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Árabe PRO</title>
+<title>Árabe Inteligente PRO</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>عربي ذكي</h1>
+<div class="overlay">
 
+<h1>عربي ذكي</h1>
+<h2>Aprende Árabe A1–A2</h2>
+
+<!-- FILTROS -->
+<div class="menu">
+<button onclick="filter('all')">Todos</button>
+<button onclick="filter('verbo')">Verbos</button>
+<button onclick="filter('sustantivo')">Sustantivos</button>
+<button onclick="filter('adjetivo')">Adjetivos</button>
+<button onclick="filter('animal')">Animales</button>
+<button onclick="filter('lugar')">Lugares</button>
+<button onclick="filter('pais')">Países</button>
+<button onclick="filter('nexo')">Conectores</button>
+</div>
+
+<!-- LISTA -->
 <div id="list"></div>
+
+<!-- AUDIO -->
+<h3>Escuchar palabra</h3>
+<input id="wordInput">
+<button onclick="speak()">🔊</button>
+
+<!-- JUEGO -->
+<h3>Juego de frases</h3>
+<div id="game"></div>
+<p id="user"></p>
+<button onclick="check()">Comprobar</button>
+<p id="result"></p>
+
+<!-- CONVERSACIÓN -->
+<h3>Modo conversación</h3>
+<p id="question"></p>
+<input id="answer" placeholder="Escribe en árabe">
+<button onclick="checkAnswer()">Responder</button>
+<p id="feedback"></p>
+
+</div>
 
 <script src="script.js"></script>
 
