@@ -1,51 +1,128 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>Árabe PRO</title>
-<link rel="stylesheet" href="style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Learning Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fatha: #ff4757;  --damma: #2ed573; --kasra: #1e90ff;
+            --shadda: #ffa502; --sukun: #747d8c; --bg: #f0f2f5;
+            --text-main: #1e293b;
+        }
 
+        body {
+            margin: 0; background-color: var(--bg);
+            font-family: 'Inter', sans-serif; direction: ltr; /* Interfaz en LTR, Árabe en RTL */
+        }
+
+        header {
+            background: white; padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        nav select {
+            padding: 8px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem;
+        }
+
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+
+        .vocab-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px;
+        }
+
+        .card {
+            background: white; border-radius: 20px; padding: 30px;
+            text-align: center; border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+
+        .arabic-word {
+            font-family: 'Amiri', serif; font-size: 4rem;
+            direction: rtl; margin-bottom: 15px; line-height: 1.4;
+        }
+
+        /* Colores de Harakat */
+        .h-fatha { color: var(--fatha); } .h-damma { color: var(--damma); }
+        .h-kasra { color: var(--kasra); } .h-shadda { color: var(--shadda); }
+        .h-sukun { color: var(--sukun); }
+
+        .translation { font-size: 1.2rem; font-weight: 600; color: var(--text-main); margin: 5px 0; }
+        .meta { font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .empty-msg { text-align: center; grid-column: 1/-1; padding: 50px; color: #94a3b8; }
+    </style>
+</head>
 <body>
 
-<div class="overlay">
+<header>
+    <h2 style="margin:0; color: #0f172a;">Lughati <span style="color:var(--fatha)">.</span></h2>
+    <nav>
+        <select id="categorySelect" onchange="loadCategory(this.value)">
+            <option value="">Selecciona Categoría</option>
+            <option value="sustantivos">Sustantivos</option>
+            <option value="animales">Animales</option>
+            <option value="verbos">Verbos</option>
+        </select>
+    </nav>
+</header>
 
-<h1>عربي ذكي</h1>
-
-<!-- MENÚ -->
-<div class="menu">
-<button onclick="showSection('vocab')">📚 Vocabulario</button>
-<button onclick="showSection('game')">🎮 Juego</button>
-<button onclick="showSection('conversation')">🧠 Conversación</button>
+<div class="container">
+    <div id="vocabGrid" class="vocab-grid">
+        <div class="empty-msg">Selecciona una categoría para empezar a estudiar</div>
+    </div>
 </div>
 
-<!-- VOCABULARIO -->
-<div id="vocab" class="section">
-<h2>Vocabulario</h2>
-<div id="list"></div>
-</div>
+<script>
+    const HARAKAT_MAP = [
+        { regex: /([\u064E])/g, class: 'h-fatha' },
+        { regex: /([\u064F])/g, class: 'h-damma' },
+        { regex: /([\u0650])/g, class: 'h-kasra' },
+        { regex: /([\u0651])/g, class: 'h-shadda' },
+        { regex: /([\u0652])/g, class: 'h-sukun' }
+    ];
 
-<!-- JUEGO -->
-<div id="game" class="section" style="display:none;">
-<h2>Construye la frase</h2>
-<div id="gameWords"></div>
-<p id="userSentence"></p>
-<button onclick="checkGame()">Comprobar</button>
-<p id="gameResult"></p>
-</div>
+    function colorize(text) {
+        if(!text) return "";
+        let result = text;
+        HARAKAT_MAP.forEach(rule => {
+            result = result.replace(rule.regex, `<span class="${rule.class}">$1</span>`);
+        });
+        return result;
+    }
 
-<!-- CONVERSACIÓN -->
-<div id="conversation" class="section" style="display:none;">
-<h2>Modo conversación</h2>
-<p id="question"></p>
-<input id="answer" placeholder="Escribe en árabe">
-<button onclick="checkAnswer()">Responder</button>
-<p id="feedback"></p>
-</div>
+    async function loadCategory(category) {
+        if(!category) return;
+        const grid = document.getElementById('vocabGrid');
+        grid.innerHTML = '<div class="empty-msg">Cargando...</div>';
 
-</div>
+        try {
+            // Asegúrate de que el archivo se llame exactamente como el value del select + .json
+            const response = await fetch(`./data/${category}.json`);
+            if (!response.ok) throw new Error('No se encontró el archivo JSON');
+            
+            const data = await response.json();
+            renderCards(data.items);
+        } catch (error) {
+            grid.innerHTML = `<div class="empty-msg">Error: Para ver los archivos JSON localmente necesitas un "Live Server" o subirlo a GitHub. <br><small>${error.message}</small></div>`;
+        }
+    }
 
-<script src="script.js"></script>
-
+    function renderCards(items) {
+        const grid = document.getElementById('vocabGrid');
+        grid.innerHTML = items.map(item => `
+            <div class="card">
+                <div class="meta">${item.plural ? 'Plural: ' + item.plural : item.genero}</div>
+                <div class="arabic-word">${colorize(item.arabe)}</div>
+                <div class="translation">${item.traduccion}</div>
+                <div style="color: #94a3b8; font-size: 0.8rem;">${item.transliteracion || ''}</div>
+            </div>
+        `).join('');
+    }
+</script>
 </body>
 </html>
