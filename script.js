@@ -1,8 +1,4 @@
-document.body.innerHTML = `
-<div style="font-size:60px; direction:rtl;">
-${highlight("مُدَرِّسٌ")}
-</div>
-`;
+document.body.innerHTML = highlight("مُدَرِّسٌ");
 
 function highlight(text){
   return text
