@@ -23,12 +23,20 @@ async function loadData() {
 }
 
 function highlight(text){
-  return text
-    .replace(/\u064E/g, '<span class="fatha">َ</span>')   // fatha
-    .replace(/\u0650/g, '<span class="kasra">ِ</span>')   // kasra
-    .replace(/\u064F/g, '<span class="damma">ُ</span>')   // damma
-    .replace(/\u0652/g, '<span class="sukun">ْ</span>')   // sukun
-    .replace(/\u0651/g, '<span class="shadda">ّ</span>'); // shadda
+  let result = "";
+
+  for (let char of text) {
+    switch(char) {
+      case "\u064E": result += '<span class="fatha">َ</span>'; break;
+      case "\u0650": result += '<span class="kasra">ِ</span>'; break;
+      case "\u064F": result += '<span class="damma">ُ</span>'; break;
+      case "\u0652": result += '<span class="sukun">ْ</span>'; break;
+      case "\u0651": result += '<span class="shadda">ّ</span>'; break;
+      default: result += char;
+    }
+  }
+
+  return result;
 }
 
 function display(){
