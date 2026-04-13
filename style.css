@@ -16,9 +16,12 @@ body {
   direction: rtl;
 }
 
-.harakat {
-  color: red;
-}
+/* COLORES HARAKAT */
+.fatha { color: blue; }
+.kasra { color: green; }
+.damma { color: red; }
+.sukun { color: gray; }
+.shadda { color: purple; }
 
 button {
   padding: 10px;
@@ -35,8 +38,4 @@ button {
   border-radius: 10px;
 }
 
-.fatha { color: blue; }
-.kasra { color: green; }
-.damma { color: red; }
-.sukun { color: gray; }
-.shadda { color: purple; }
+
