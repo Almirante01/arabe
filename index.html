@@ -1,91 +1,134 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Árabe Pro - Harakat a Color</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Dev Learning</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Noto+Naskh+Arabic&display=swap" rel="stylesheet">
     <style>
         :root {
-            --fatha: #ff0000;  --damma: #008000; --kasra: #0000ff;
-            --shadda: #ff8c00; --sukun: #808080; --tanwin: #800080;
+            /* Palette optimizada para legibilidad (WCAG compliant) */
+            --color-fatha: #ff3e3e;
+            --color-damma: #2ecc71;
+            --color-kasra: #3498db;
+            --color-shadda: #f1c40f;
+            --color-sukun: #95a5a6;
+            --color-tanwin: #9b59b6;
+            --color-base: #1a1a1a;
         }
 
-        body { background: #fdfdfd; font-family: sans-serif; }
-        .container { max-width: 1000px; margin: 50px auto; text-align: center; }
-        
-        /* Estilo de la Palabra */
-        .palabra-arabe {
-            font-family: 'Amiri', serif; /* Amiri separa mejor los spans de color */
-            font-size: 6rem;
+        body {
+            background: #fcfcfc;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; padding: 20px;
+            direction: ltr; /* UI en LTR */
+        }
+
+        .dashboard {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .word-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        /* COMPONENTE CORE: Renderizado Árabe */
+        .arabic-display {
+            font-family: 'Amiri', serif;
+            font-size: 5rem;
+            color: var(--color-base);
             direction: rtl;
-            unicode-bidi: isolate;
-            color: #000; /* Letras siempre negras */
-            line-height: 1.5;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            /* Evita que el span rompa la palabra en algunos motores */
+            display: inline-block;
+            unicode-bidi: bidi-override;
         }
 
-        /* Forzado de Color para Harakat */
-        /* Usamos display: inline para que no se separe de la letra */
-        .h-fatha  { color: var(--fatha) !important;  -webkit-text-fill-color: var(--fatha); }
-        .h-damma  { color: var(--damma) !important;  -webkit-text-fill-color: var(--damma); }
-        .h-kasra  { color: var(--kasra) !important;  -webkit-text-fill-color: var(--kasra); }
-        .h-shadda { color: var(--shadda) !important; -webkit-text-fill-color: var(--shadda); }
-        .h-sukun  { color: var(--sukun) !important;  -webkit-text-fill-color: var(--sukun); }
-        .h-tanwin { color: var(--tanwin) !important; -webkit-text-fill-color: var(--tanwin); }
+        /* Clases de Harakat con inyección de color forzada */
+        .h-fatha  { color: var(--color-fatha) !important;  display: inline; }
+        .h-damma  { color: var(--color-damma) !important;  display: inline; }
+        .h-kasra  { color: var(--color-kasra) !important;  display: inline; }
+        .h-shadda { color: var(--color-shadda) !important; display: inline; }
+        .h-sukun  { color: var(--color-sukun) !important;  display: inline; }
+        .h-tanwin { color: var(--color-tanwin) !important; display: inline; }
 
-        .card {
-            background: white; border: 1px solid #eee; padding: 20px;
-            border-radius: 12px; display: inline-block; min-width: 250px;
+        .translation {
+            color: #666;
+            font-size: 1.2rem;
+            font-weight: 500;
         }
-        
-        .trad { font-size: 1.5rem; color: #444; margin-top: 10px; }
-        select { padding: 10px; font-size: 1rem; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <select id="cat" onchange="load(this.value)">
-        <option value="">Selecciona Categoría</option>
-        <option value="animales">Animales</option>
-        <option value="sustantivos">Sustantivos</option>
-    </select>
-
-    <div id="grid"></div>
-</div>
+    <div class="dashboard" id="mainGrid">
+        </div>
 
 <script>
-    const rules = [
-        { char: '\u064E', cls: 'h-fatha' },  { char: '\u064F', cls: 'h-damma' },
-        { char: '\u0650', cls: 'h-kasra' },  { char: '\u0651', cls: 'h-shadda' },
-        { char: '\u0652', cls: 'h-sukun' },  { char: '\u064B', cls: 'h-tanwin' },
-        { char: '\u064C', cls: 'h-tanwin' }, { char: '\u064D', cls: 'h-tanwin' }
-    ];
+    /**
+     * Mapeo de caracteres Unicode Árabes a Clases CSS
+     * Se procesan como entidades independientes para evitar colisiones de renderizado.
+     */
+    const HARAKAT_MAP = {
+        '\u064E': 'h-fatha',
+        '\u064F': 'h-damma',
+        '\u0650': 'h-kasra',
+        '\u0651': 'h-shadda',
+        '\u0652': 'h-sukun',
+        '\u064B': 'h-tanwin',
+        '\u064C': 'h-tanwin',
+        '\u064D': 'h-tanwin'
+    };
 
-    function colorize(txt) {
-        let res = txt;
-        rules.forEach(r => {
-            // El truco es envolver el signo en un span y asegurar que no haya espacios
-            const regex = new RegExp(r.char, 'g');
-            res = res.replace(regex, `<span class="${r.cls}">${r.char}</span>`);
-        });
-        return res;
-    }
-
-    async function load(cat) {
-        if(!cat) return;
-        try {
-            const res = await fetch(`./data/${cat}.json`);
-            const data = await res.json();
-            document.getElementById('grid').innerHTML = data.items.map(i => `
-                <div class="card">
-                    <div class="palabra-arabe">${colorize(i.arabe)}</div>
-                    <div class="trad">${i.traduccion}</div>
-                </div>
-            `).join('');
-        } catch(e) {
-            alert("Error: Para probarlo localmente necesitas un 'Live Server'. En GitHub funcionará directo.");
+    /**
+     * Parser: Transforma el string árabe plano en HTML enriquecido.
+     * Implementa una lógica de reemplazo basada en literales de caracteres.
+     */
+    function parseArabicText(rawText) {
+        let result = "";
+        for (const char of rawText) {
+            if (HARAKAT_MAP[char]) {
+                result += `<span class="${HARAKAT_MAP[char]}">${char}</span>`;
+            } else {
+                result += char;
+            }
         }
+        return result;
     }
+
+    /**
+     * Data Fetcher (Simulación de carga de archivos JSON)
+     */
+    async function initApp() {
+        const grid = document.getElementById('mainGrid');
+        
+        // Simulación de los archivos que tienes en la carpeta /data/
+        // En producción usa: const response = await fetch('./data/animales.json');
+        const mockData = [
+            { arabe: "كِتَابٌ", trad: "Libro" },
+            { arabe: "قِطَّةٌ", trad: "Gato" },
+            { arabe: "مُدَرِّسٌ", trad: "Profesor" }
+        ];
+
+        grid.innerHTML = mockData.map(item => `
+            <div class="word-card">
+                <div class="arabic-display">${parseArabicText(item.arabe)}</div>
+                <div class="translation">${item.trad}</div>
+            </div>
+        `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>
