@@ -1,35 +1,64 @@
-const HARAKAT_MAP = [
-    { regex: /([\u064E])/g, class: 'h-fatha' },
-    { regex: /([\u064F])/g, class: 'h-damma' },
-    { regex: /([\u0650])/g, class: 'h-kasra' },
-    { regex: /([\u0651])/g, class: 'h-shadda' },
-    { regex: /([\u0652])/g, class: 'h-sukun' }
-];
+let words = [];
 
-function colorize(text) {
-    let result = text;
-    HARAKAT_MAP.forEach(rule => {
-        result = result.replace(rule.regex, `<span class="${rule.class}">$1</span>`);
-    });
-    return result;
+// 🔥 RENDER ÁRABE PROFESIONAL
+function renderArabic(text){
+
+  const harakat = {
+    "َ":"fatha",
+    "ِ":"kasra",
+    "ُ":"damma",
+    "ْ":"sukun",
+    "ّ":"shadda"
+  };
+
+  let result = "";
+
+  for(let i=0; i<text.length; i++){
+
+    let char = text[i];
+
+    // si es haraka, la ignoramos sola
+    if(harakat[char]) continue;
+
+    let next = text[i+1];
+
+    if(harakat[next]){
+      result += `
+        <span class="letra">
+          ${char}
+          <span class="${harakat[next]}">${next}</span>
+        </span>
+      `;
+      i++;
+    } else {
+      result += `<span class="letra">${char}</span>`;
+    }
+  }
+
+  return result;
 }
 
-async function loadCategory(file) {
-    const response = await fetch(`./data/${file}.json`);
-    const data = await response.json();
-    renderCards(data.items);
+// 📦 CARGAR DATOS
+async function loadData(){
+  let data = await fetch("data/vocab.json").then(r=>r.json());
+  words = data;
+  display();
 }
 
-function renderCards(items) {
-    const container = document.getElementById('main-container');
-    container.innerHTML = items.map(item => `
-        <div class="card">
-            <div class="arabic-word">${colorize(item.arabe)}</div>
-            <div class="info">
-                <strong style="color: #64748b; font-size: 0.9rem;">${item.singular}</strong>
-                <h3 style="margin: 5px 0; color: #1e293b;">${item.traduccion}</h3>
-                <span class="badge">${item.genero === 'F' ? 'Femenino' : 'Masculino'}</span>
-            </div>
-        </div>
-    `).join('');
+// 🧾 MOSTRAR
+function display(){
+  let html = "";
+
+  words.forEach(w=>{
+    html += `
+      <div class="card">
+        <div class="arabe">${renderArabic(w.ar)}</div>
+        <div>${w.es}</div>
+      </div>
+    `;
+  });
+
+  document.getElementById("list").innerHTML = html;
 }
+
+loadData();
