@@ -3,89 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabic Learning Pro | Harakat Perfectos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* Definición de Variables de Color */
-        :root {
-            /* Colores Vivos y Claros para los Harakat */
-            --fatha-color: #e74c3c;    /* Rojo */
-            --damma-color: #27ae60;    /* Verde */
-            --kasra-color: #2980b9;    /* Azul */
-            --shadda-color: #f39c12;   /* Naranja/Dorado */
-            --sukun-color: #7f8c8d;    /* Gris */
-            --tanwin-color: #8e44ad;   /* Morado */
+    <title>Arabic Learning Pro | Harakat Perfectos y Coloreados</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
 
-            /* Colores de la Interfaz */
-            --bg-body: #f4f7f6;
+    <style>
+        :root {
+            /* Colores Modernos para Harakat */
+            --fatha-color: #ff6b6b;    /* Rojo suave */
+            --damma-color: #51cf66;    /* Verde suave */
+            --kasra-color: #339af0;    /* Azul suave */
+            --shadda-color: #fcc419;   /* Amarillo suave */
+            --sukun-color: #adb5bd;    /* Gris suave */
+            --tanwin-color: #cc5de8;   /* Morado suave */
+
+            /* Interfaz */
+            --bg-body: #f8f9fa;
             --bg-card: #ffffff;
-            --text-main: #2c3e50;
-            --text-sub: #7f8c8d;
-            --border-card: #e1e8ed;
+            --text-main: #212529;
+            --border-card: #e9ecef;
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: var(--bg-body);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             color: var(--text-main);
-            direction: ltr; /* La interfaz es LTR */
+            direction: ltr;
         }
 
-        /* Estilos del Header */
         header {
             background-color: var(--bg-card);
             padding: 1rem 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: var(--text-main);
-        }
-
-        header h1 span {
-            color: var(--fatha-color);
-        }
+        header h1 { margin: 0; font-size: 1.5rem; }
+        header h1 span { color: var(--fatha-color); }
 
         nav select {
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 8px 12px; border-radius: 8px;
             border: 1px solid var(--border-card);
-            font-size: 1rem;
-            outline: none;
-            cursor: pointer;
+            font-size: 1rem; cursor: pointer;
         }
 
-        /* Contenedor Principal */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
 
-        /* Rejilla de Tarjetas */
         .vocab-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
         }
 
-        /* Estilos de la Tarjeta */
         .card {
             background-color: var(--bg-card);
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 16px; padding: 30px;
             border: 1px solid var(--border-card);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             text-align: center;
         }
@@ -95,70 +71,71 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
-        /* === SOLUCIÓN DEFINITIVA PARA EL POSICIONAMIENTO === */
-        .arabic-word-container {
-            font-family: 'Noto Naskh Arabic', serif; /* Una fuente excelente para ligaduras */
-            font-size: 4.5rem; /* Tamaño grande para ver bien */
-            direction: rtl; /* Fundamental: Derecha a Izquierda */
-            line-height: 1.4; /* Ajuste para evitar que los harakat se corten */
+        /* === LA SOLUCIÓN DEFINITIVA: TÉCNICA DE SUPERPOSICIÓN === */
+        
+        .arabic-word-area {
+            position: relative; /* Base para la superposición */
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 5rem; /* Muy grande */
+            direction: rtl;
+            line-height: 1.4;
             margin-bottom: 15px;
-            color: #000000; /* Color de las letras base (negro) */
+            display: flex;
+            justify-content: center;
+            height: 1.4em; /* Altura fija para alinear */
+        }
+
+        /* Capa 1: Letras Base (Negras y fijas) */
+        .arabic-base {
+            color: #000000;
+            position: relative;
+            z-index: 1;
+            /* Usamos una técnica para "apagar" los harakat en esta capa */
+            font-variant-ligatures: no-common-ligatures;
+        }
+
+        /* Capa 2: Harakat Coloreados (Superpuesta) */
+        .arabic-harakat {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            /* Hacemos las letras base transparentes */
+            color: transparent; 
             
-            /* Esta propiedad es la clave: asegura que los spans internos se traten como parte del texto fluido */
-            display: inline-block; 
+            /* Importante: display contents AQUÍ para posicionar harakat */
+            display: flex; 
+            justify-content: center;
         }
 
-        /* Estilos para los spans que envuelven los harakat */
-        .arabic-word-container span {
-            /* display: contents; hace que el span actúe como si no existiera para el diseño, 
-               pero mantiene el color aplicado. Esto preserva la ligadura tipográfica. */
-            display: contents; 
+        /* Forzamos que los spans de harakat tengan color dentro de la capa transparente */
+        .arabic-harakat span {
+            display: contents; /* Mantiene posicionamiento */
         }
 
-        /* Clases para los colores de los Harakat (inyectadas por JS) */
-        /* Usamos selectores más específicos para asegurar la aplicación */
-        .arabic-word-container .h-fatha { color: var(--fatha-color) !important; }
-        .arabic-word-container .h-damma { color: var(--damma-color) !important; }
-        .arabic-word-container .h-kasra { color: var(--kasra-color) !important; }
-        .arabic-word-container .h-shadda { color: var(--shadda-color) !important; }
-        .arabic-word-container .h-sukun { color: var(--sukun-color) !important; }
-        .arabic-word-container .h-tanwin { color: var(--tanwin-color) !important; }
+        /* Colores forzados con !important */
+        .h-fatha { color: var(--fatha-color) !important; }
+        .h-damma { color: var(--damma-color) !important; }
+        .h-kasra { color: var(--kasra-color) !important; }
+        .h-shadda { color: var(--shadda-color) !important; }
+        .h-sukun { color: var(--sukun-color) !important; }
+        .h-tanwin { color: var(--tanwin-color) !important; }
 
-        /* Estilos de Traducción y Meta */
-        .translation {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 10px 0 5px 0;
-            color: var(--text-main);
-        }
-
-        .transliteration {
-            font-size: 1rem;
-            color: var(--text-sub);
-            font-style: italic;
-            margin-bottom: 10px;
-        }
-
+        /* Estilos de Texto */
+        .translation { font-size: 1.5rem; font-weight: 600; margin: 10px 0 5px 0; }
+        .transliteration { font-size: 1rem; color: #868e96; font-style: italic; margin-bottom: 15px; }
         .meta-info {
-            font-size: 0.8rem;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-top: 1px solid var(--border-card);
-            padding-top: 10px;
-            margin-top: 10px;
+            font-size: 0.8rem; color: #868e96; text-transform: uppercase;
+            letter-spacing: 1px; border-top: 1px solid var(--border-card);
+            padding-top: 10px; margin-top: 10px;
         }
 
-        /* Mensajes de Estado */
         .status-msg {
-            grid-column: 1/-1;
-            text-align: center;
-            padding: 100px;
-            color: var(--text-sub);
-            font-size: 1.2rem;
-            background: white;
-            border-radius: 15px;
-            border: 1px solid var(--border-card);
+            grid-column: 1/-1; text-align: center;
+            padding: 80px; color: #868e96;
+            background: white; border-radius: 16px; border: 1px solid var(--border-card);
         }
     </style>
 </head>
@@ -172,7 +149,6 @@
             <option value="sustantivos">Sustantivos</option>
             <option value="animales">Animales</option>
             <option value="verbos">Verbos</option>
-            <option value="comidas">Comidas</option>
         </select>
     </nav>
 </header>
@@ -180,70 +156,58 @@
 <div class="container">
     <div id="vocabGrid" class="vocab-grid">
         <div class="status-msg">
-            <h2>¡Bienvenido!</h2>
-            <p>Selecciona una categoría en el menú superior para empezar a estudiar.</p>
-            <p style="font-size: 0.9rem; color: #e74c3c;">Nota: Para cargar los archivos JSON localmente en tu PC (sin GitHub), necesitas abrirlo con un "Live Server".</p>
+            <h2>¡Bienvenido al estudio!</h2>
+            <p>Selecciona una categoría para ver tus palabras con harakat coloreados.</p>
         </div>
     </div>
 </div>
 
 <script>
-    // Mapeo preciso de Unicodes de Harakat a clases CSS
+    // Unicodes de Harakat
     const HARAKAT_RULES = [
-        { regex: /([\u064E])/g, class: 'h-fatha' },  // Fatha
-        { regex: /([\u064F])/g, class: 'h-damma' },  // Damma
-        { regex: /([\u0650])/g, class: 'h-kasra' },  // Kasra
-        { regex: /([\u0651])/g, class: 'h-shadda' }, // Shadda
-        { regex: /([\u0652])/g, class: 'h-sukun' },  // Sukun
-        { regex: /([\u064B\u064C\u064D])/g, class: 'h-tanwin' } // Tanwins
+        { regex: /([\u064E])/g, class: 'h-fatha' },
+        { regex: /([\u064F])/g, class: 'h-damma' },
+        { regex: /([\u0650])/g, class: 'h-kasra' },
+        { regex: /([\u0651])/g, class: 'h-shadda' },
+        { regex: /([\u0652])/g, class: 'h-sukun' },
+        { regex: /([\u064B\u064C\u064D])/g, class: 'h-tanwin' }
     ];
 
-    // Función que aplica el color a los harakat envolviéndolos en spans
+    // Función de coloreado (envuelve harakat en spans)
     function colorizeHarakat(text) {
         if (!text) return "";
         let coloredText = text;
         HARAKAT_RULES.forEach(rule => {
-            // Reemplazamos cada harakat por un span con su clase de color
-            // El $1 mantiene el carácter original del harakat
             coloredText = coloredText.replace(rule.regex, `<span class="${rule.class}">$1</span>`);
         });
         return coloredText;
     }
 
-    // Función para cargar la categoría seleccionada
     async function loadCategory(category) {
         if (!category) return;
         const grid = document.getElementById('vocabGrid');
-        grid.innerHTML = '<div class="status-msg">Cargando vocabulario...</div>';
+        grid.innerHTML = '<div class="status-msg">Cargando...</div>';
 
         try {
-            // Buscamos el archivo JSON en la carpeta 'data'
             const response = await fetch(`./data/${category}.json`);
-            if (!response.ok) throw new Error(`No se pudo cargar el archivo: data/${category}.json`);
+            if (!response.ok) throw new Error('Archivo no encontrado');
             const data = await response.json();
             renderCards(data.items);
         } catch (error) {
-            console.error(error);
-            grid.innerHTML = `
-                <div class="status-msg" style="color: #e74c3c;">
-                    <h3>Error al cargar</h3>
-                    <p>${error.message}</p>
-                    <p style="font-size: 0.8rem; color: #7f8c8d;">Asegúrate de tener la carpeta <strong>'data'</strong> con los archivos JSON correctos y de usar un <strong>Live Server</strong> si estás en local.</p>
-                </div>`;
+            grid.innerHTML = `<div class="status-msg" style="color: #e74c3c;">Error: Necesitas un Live Server para ver los JSON localmente.</div>`;
         }
     }
 
-    // Función para renderizar las tarjetas en la cuadrícula
     function renderCards(items) {
         const grid = document.getElementById('vocabGrid');
-        if (!items || items.length === 0) {
-            grid.innerHTML = '<div class="status-msg">No hay palabras en esta categoría.</div>';
-            return;
-        }
-
         grid.innerHTML = items.map(item => `
             <div class="card">
-                <div class="arabic-word-container">${colorizeHarakat(item.arabe)}</div>
+                <div class="arabic-word-area">
+                    <div class="arabic-base">${item.arabe}</div>
+                    
+                    <div class="arabic-harakat">${colorizeHarakat(item.arabe)}</div>
+                </div>
+
                 <div class="translation">${item.traduccion}</div>
                 <div class="transliteration">${item.transliteracion || ''}</div>
                 <div class="meta-info">
