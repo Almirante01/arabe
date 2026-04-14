@@ -2,222 +2,90 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabic Learning Pro | Harakat Perfectos y Coloreados</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
-
+    <title>Árabe Pro - Harakat a Color</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Noto+Naskh+Arabic&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Colores Modernos para Harakat */
-            --fatha-color: #ff6b6b;    /* Rojo suave */
-            --damma-color: #51cf66;    /* Verde suave */
-            --kasra-color: #339af0;    /* Azul suave */
-            --shadda-color: #fcc419;   /* Amarillo suave */
-            --sukun-color: #adb5bd;    /* Gris suave */
-            --tanwin-color: #cc5de8;   /* Morado suave */
-
-            /* Interfaz */
-            --bg-body: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-main: #212529;
-            --border-card: #e9ecef;
+            --fatha: #ff0000;  --damma: #008000; --kasra: #0000ff;
+            --shadda: #ff8c00; --sukun: #808080; --tanwin: #800080;
         }
 
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg-body);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            color: var(--text-main);
-            direction: ltr;
+        body { background: #fdfdfd; font-family: sans-serif; }
+        .container { max-width: 1000px; margin: 50px auto; text-align: center; }
+        
+        /* Estilo de la Palabra */
+        .palabra-arabe {
+            font-family: 'Amiri', serif; /* Amiri separa mejor los spans de color */
+            font-size: 6rem;
+            direction: rtl;
+            unicode-bidi: isolate;
+            color: #000; /* Letras siempre negras */
+            line-height: 1.5;
         }
 
-        header {
-            background-color: var(--bg-card);
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        header h1 { margin: 0; font-size: 1.5rem; }
-        header h1 span { color: var(--fatha-color); }
-
-        nav select {
-            padding: 8px 12px; border-radius: 8px;
-            border: 1px solid var(--border-card);
-            font-size: 1rem; cursor: pointer;
-        }
-
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-
-        .vocab-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
+        /* Forzado de Color para Harakat */
+        /* Usamos display: inline para que no se separe de la letra */
+        .h-fatha  { color: var(--fatha) !important;  -webkit-text-fill-color: var(--fatha); }
+        .h-damma  { color: var(--damma) !important;  -webkit-text-fill-color: var(--damma); }
+        .h-kasra  { color: var(--kasra) !important;  -webkit-text-fill-color: var(--kasra); }
+        .h-shadda { color: var(--shadda) !important; -webkit-text-fill-color: var(--shadda); }
+        .h-sukun  { color: var(--sukun) !important;  -webkit-text-fill-color: var(--sukun); }
+        .h-tanwin { color: var(--tanwin) !important; -webkit-text-fill-color: var(--tanwin); }
 
         .card {
-            background-color: var(--bg-card);
-            border-radius: 16px; padding: 30px;
-            border: 1px solid var(--border-card);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            text-align: center;
+            background: white; border: 1px solid #eee; padding: 20px;
+            border-radius: 12px; display: inline-block; min-width: 250px;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-
-        /* === LA SOLUCIÓN DEFINITIVA: TÉCNICA DE SUPERPOSICIÓN === */
         
-        .arabic-word-area {
-            position: relative; /* Base para la superposición */
-            font-family: 'Noto Naskh Arabic', serif;
-            font-size: 5rem; /* Muy grande */
-            direction: rtl;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            height: 1.4em; /* Altura fija para alinear */
-        }
-
-        /* Capa 1: Letras Base (Negras y fijas) */
-        .arabic-base {
-            color: #000000;
-            position: relative;
-            z-index: 1;
-            /* Usamos una técnica para "apagar" los harakat en esta capa */
-            font-variant-ligatures: no-common-ligatures;
-        }
-
-        /* Capa 2: Harakat Coloreados (Superpuesta) */
-        .arabic-harakat {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 2;
-            /* Hacemos las letras base transparentes */
-            color: transparent; 
-            
-            /* Importante: display contents AQUÍ para posicionar harakat */
-            display: flex; 
-            justify-content: center;
-        }
-
-        /* Forzamos que los spans de harakat tengan color dentro de la capa transparente */
-        .arabic-harakat span {
-            display: contents; /* Mantiene posicionamiento */
-        }
-
-        /* Colores forzados con !important */
-        .h-fatha { color: var(--fatha-color) !important; }
-        .h-damma { color: var(--damma-color) !important; }
-        .h-kasra { color: var(--kasra-color) !important; }
-        .h-shadda { color: var(--shadda-color) !important; }
-        .h-sukun { color: var(--sukun-color) !important; }
-        .h-tanwin { color: var(--tanwin-color) !important; }
-
-        /* Estilos de Texto */
-        .translation { font-size: 1.5rem; font-weight: 600; margin: 10px 0 5px 0; }
-        .transliteration { font-size: 1rem; color: #868e96; font-style: italic; margin-bottom: 15px; }
-        .meta-info {
-            font-size: 0.8rem; color: #868e96; text-transform: uppercase;
-            letter-spacing: 1px; border-top: 1px solid var(--border-card);
-            padding-top: 10px; margin-top: 10px;
-        }
-
-        .status-msg {
-            grid-column: 1/-1; text-align: center;
-            padding: 80px; color: #868e96;
-            background: white; border-radius: 16px; border: 1px solid var(--border-card);
-        }
+        .trad { font-size: 1.5rem; color: #444; margin-top: 10px; }
+        select { padding: 10px; font-size: 1rem; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Lughat<span>ī</span> Pro</h1>
-    <nav>
-        <select id="categorySelect" onchange="loadCategory(this.value)">
-            <option value="">-- Elige Categoría --</option>
-            <option value="sustantivos">Sustantivos</option>
-            <option value="animales">Animales</option>
-            <option value="verbos">Verbos</option>
-        </select>
-    </nav>
-</header>
-
 <div class="container">
-    <div id="vocabGrid" class="vocab-grid">
-        <div class="status-msg">
-            <h2>¡Bienvenido al estudio!</h2>
-            <p>Selecciona una categoría para ver tus palabras con harakat coloreados.</p>
-        </div>
-    </div>
+    <select id="cat" onchange="load(this.value)">
+        <option value="">Selecciona Categoría</option>
+        <option value="animales">Animales</option>
+        <option value="sustantivos">Sustantivos</option>
+    </select>
+
+    <div id="grid"></div>
 </div>
 
 <script>
-    // Unicodes de Harakat
-    const HARAKAT_RULES = [
-        { regex: /([\u064E])/g, class: 'h-fatha' },
-        { regex: /([\u064F])/g, class: 'h-damma' },
-        { regex: /([\u0650])/g, class: 'h-kasra' },
-        { regex: /([\u0651])/g, class: 'h-shadda' },
-        { regex: /([\u0652])/g, class: 'h-sukun' },
-        { regex: /([\u064B\u064C\u064D])/g, class: 'h-tanwin' }
+    const rules = [
+        { char: '\u064E', cls: 'h-fatha' },  { char: '\u064F', cls: 'h-damma' },
+        { char: '\u0650', cls: 'h-kasra' },  { char: '\u0651', cls: 'h-shadda' },
+        { char: '\u0652', cls: 'h-sukun' },  { char: '\u064B', cls: 'h-tanwin' },
+        { char: '\u064C', cls: 'h-tanwin' }, { char: '\u064D', cls: 'h-tanwin' }
     ];
 
-    // Función de coloreado (envuelve harakat en spans)
-    function colorizeHarakat(text) {
-        if (!text) return "";
-        let coloredText = text;
-        HARAKAT_RULES.forEach(rule => {
-            coloredText = coloredText.replace(rule.regex, `<span class="${rule.class}">$1</span>`);
+    function colorize(txt) {
+        let res = txt;
+        rules.forEach(r => {
+            // El truco es envolver el signo en un span y asegurar que no haya espacios
+            const regex = new RegExp(r.char, 'g');
+            res = res.replace(regex, `<span class="${r.cls}">${r.char}</span>`);
         });
-        return coloredText;
+        return res;
     }
 
-    async function loadCategory(category) {
-        if (!category) return;
-        const grid = document.getElementById('vocabGrid');
-        grid.innerHTML = '<div class="status-msg">Cargando...</div>';
-
+    async function load(cat) {
+        if(!cat) return;
         try {
-            const response = await fetch(`./data/${category}.json`);
-            if (!response.ok) throw new Error('Archivo no encontrado');
-            const data = await response.json();
-            renderCards(data.items);
-        } catch (error) {
-            grid.innerHTML = `<div class="status-msg" style="color: #e74c3c;">Error: Necesitas un Live Server para ver los JSON localmente.</div>`;
+            const res = await fetch(`./data/${cat}.json`);
+            const data = await res.json();
+            document.getElementById('grid').innerHTML = data.items.map(i => `
+                <div class="card">
+                    <div class="palabra-arabe">${colorize(i.arabe)}</div>
+                    <div class="trad">${i.traduccion}</div>
+                </div>
+            `).join('');
+        } catch(e) {
+            alert("Error: Para probarlo localmente necesitas un 'Live Server'. En GitHub funcionará directo.");
         }
     }
-
-    function renderCards(items) {
-        const grid = document.getElementById('vocabGrid');
-        grid.innerHTML = items.map(item => `
-            <div class="card">
-                <div class="arabic-word-area">
-                    <div class="arabic-base">${item.arabe}</div>
-                    
-                    <div class="arabic-harakat">${colorizeHarakat(item.arabe)}</div>
-                </div>
-
-                <div class="translation">${item.traduccion}</div>
-                <div class="transliteration">${item.transliteracion || ''}</div>
-                <div class="meta-info">
-                    ${item.genero ? `Género: ${item.genero}` : ''} 
-                    ${item.plural ? `| Plural: ${item.plural}` : ''}
-                </div>
-            </div>
-        `).join('');
-    }
 </script>
-
 </body>
 </html>
