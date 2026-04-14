@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabic Learning Pro | Harakat a Color</title>
+    <title>Arabic Learning Pro | Harakat Perfectos</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Definición de Variables de Color */
@@ -95,33 +95,34 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
-        /* === LO MÁS IMPORTANTE: Estilos para la Palabra Árabe === */
+        /* === SOLUCIÓN DEFINITIVA PARA EL POSICIONAMIENTO === */
         .arabic-word-container {
-            font-family: 'Noto Naskh Arabic', serif; /* Una fuente que renderiza bien ligaduras */
-            font-size: 4.5rem; /* Tamaño muy grande */
+            font-family: 'Noto Naskh Arabic', serif; /* Una fuente excelente para ligaduras */
+            font-size: 4.5rem; /* Tamaño grande para ver bien */
             direction: rtl; /* Fundamental: Derecha a Izquierda */
-            line-height: 1.2;
+            line-height: 1.4; /* Ajuste para evitar que los harakat se corten */
             margin-bottom: 15px;
-            /* Esta propiedad ayuda a que los span internos no rompan la palabra */
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            color: #000000; /* Color de las letras base (negro) */
+            
+            /* Esta propiedad es la clave: asegura que los spans internos se traten como parte del texto fluido */
+            display: inline-block; 
         }
 
-        /* Estilos de las letras base (negras) */
-        .arabic-letter {
-            color: #000000;
-            position: relative;
-            display: inline-block;
+        /* Estilos para los spans que envuelven los harakat */
+        .arabic-word-container span {
+            /* display: contents; hace que el span actúe como si no existiera para el diseño, 
+               pero mantiene el color aplicado. Esto preserva la ligadura tipográfica. */
+            display: contents; 
         }
 
-        /* Clases para los Harakat (inyectadas por JS) */
-        .h-fatha { color: var(--fatha-color) !important; }
-        .h-damma { color: var(--damma-color) !important; }
-        .h-kasra { color: var(--kasra-color) !important; }
-        .h-shadda { color: var(--shadda-color) !important; }
-        .h-sukun { color: var(--sukun-color) !important; }
-        .h-tanwin { color: var(--tanwin-color) !important; }
+        /* Clases para los colores de los Harakat (inyectadas por JS) */
+        /* Usamos selectores más específicos para asegurar la aplicación */
+        .arabic-word-container .h-fatha { color: var(--fatha-color) !important; }
+        .arabic-word-container .h-damma { color: var(--damma-color) !important; }
+        .arabic-word-container .h-kasra { color: var(--kasra-color) !important; }
+        .arabic-word-container .h-shadda { color: var(--shadda-color) !important; }
+        .arabic-word-container .h-sukun { color: var(--sukun-color) !important; }
+        .arabic-word-container .h-tanwin { color: var(--tanwin-color) !important; }
 
         /* Estilos de Traducción y Meta */
         .translation {
@@ -181,7 +182,7 @@
         <div class="status-msg">
             <h2>¡Bienvenido!</h2>
             <p>Selecciona una categoría en el menú superior para empezar a estudiar.</p>
-            <p style="font-size: 0.9rem; color: #e74c3c;">Nota: Para que esto funcione localmente en tu PC (sin GitHub), necesitas abrirlo con un "Live Server".</p>
+            <p style="font-size: 0.9rem; color: #e74c3c;">Nota: Para cargar los archivos JSON localmente en tu PC (sin GitHub), necesitas abrirlo con un "Live Server".</p>
         </div>
     </div>
 </div>
@@ -197,12 +198,13 @@
         { regex: /([\u064B\u064C\u064D])/g, class: 'h-tanwin' } // Tanwins
     ];
 
-    // Función que aplica el color a los harakat sin romper la palabra
+    // Función que aplica el color a los harakat envolviéndolos en spans
     function colorizeHarakat(text) {
         if (!text) return "";
         let coloredText = text;
         HARAKAT_RULES.forEach(rule => {
             // Reemplazamos cada harakat por un span con su clase de color
+            // El $1 mantiene el carácter original del harakat
             coloredText = coloredText.replace(rule.regex, `<span class="${rule.class}">$1</span>`);
         });
         return coloredText;
@@ -241,9 +243,7 @@
 
         grid.innerHTML = items.map(item => `
             <div class="card">
-                <div class="arabic-word-container">
-                    ${colorizeHarakat(item.arabe)}
-                </div>
+                <div class="arabic-word-container">${colorizeHarakat(item.arabe)}</div>
                 <div class="translation">${item.traduccion}</div>
                 <div class="transliteration">${item.transliteracion || ''}</div>
                 <div class="meta-info">
